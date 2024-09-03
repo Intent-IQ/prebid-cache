@@ -2,7 +2,6 @@ FROM ubuntu:20.04 AS build
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y wget
-ENV GO_INSTALLER=go1.19.5.linux-amd64.tar.gz
 WORKDIR /tmp
 RUN wget https://dl.google.com/go/go1.22.3.linux-amd64.tar.gz && \
     tar -xf go1.22.3.linux-amd64.tar.gz && \
@@ -21,7 +20,7 @@ RUN go mod tidy
 RUN go mod vendor
 ARG TEST="true"
 # RUN if [ "$TEST" != "false" ]; then ./validate.sh ; fi
-RUN go build -mod=vendor -ldflags "-X github.com/prebid/prebid-cache/version.Ver=`git describe --tags` -X github.com/prebid/prebid-cache/version.Rev=`git rev-parse HEAD`" .
+RUN go build -mod=vendor -ldflags "-X github.com/prebid/prebid-cache/version.Ver=`git describe --tags | sed 's/^v//'` -X github.com/prebid/prebid-cache/version.Rev=`git rev-parse HEAD`" .
 
 FROM ubuntu:20.04 AS release
 LABEL maintainer="hans.hjort@xandr.com" 
