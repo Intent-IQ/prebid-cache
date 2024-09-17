@@ -3,8 +3,8 @@ RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y wget
 WORKDIR /tmp
-RUN wget https://dl.google.com/go/go1.22.3.linux-amd64.tar.gz && \
-    tar -xf go1.22.3.linux-amd64.tar.gz && \
+RUN wget https://dl.google.com/go/go1.23.1.linux-amd64.tar.gz && \
+    tar -xf go1.23.1.linux-amd64.tar.gz && \
     mv go /usr/local
 RUN mkdir -p /app/prebid-cache/
 WORKDIR /app/prebid-cache/
@@ -14,7 +14,7 @@ ENV GOPROXY="https://proxy.golang.org"
 RUN apt-get update && \
     apt-get install -y git && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-ENV CGO_ENABLED 0
+ENV CGO_ENABLED=0
 COPY ./ ./
 RUN go mod tidy
 RUN go mod vendor
